@@ -1,12 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import GlobalStyle from './global'
+import Routes from './routes';
+
+import CountProvider from './Context/Count'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <CountProvider>
+
+      <GlobalStyle />
+      <Routes />
+      
+    </CountProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
