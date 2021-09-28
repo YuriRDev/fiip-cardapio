@@ -24,14 +24,14 @@ const CountProvider: React.FC = ({ children }) => {
 
         let adicionaisPrice = 0
 
-        if(adicionais){
+        if (adicionais) {
             adicionais.map((item: any) => {
                 console.log(item)
                 adicionaisPrice += item.price
             })
         }
 
-        setCarrinhoPrice(carrinhoPrice + (quantity * price) + adicionaisPrice)
+        setCarrinhoPrice(carrinhoPrice + (quantity * price) + (adicionaisPrice * quantity))
         setCarrinho(carrinhoTotal)
         console.log(carrinhoTotal)
     }
@@ -39,18 +39,42 @@ const CountProvider: React.FC = ({ children }) => {
     const handleEditCarrinhoEdit = (index: number, math: string) => {
         let carrinhoNovo = carrinho
         if (math === '+') {
-            setCarrinhoPrice(carrinhoPrice + carrinhoNovo[index].price)
+            // ver se o item tem adicioanl
+
+            let adicionaisTotal = 0
+            if (carrinhoNovo[index].adicionais) {
+                carrinhoNovo[index].adicionais.map((item: any) => {
+                    adicionaisTotal += (item.price)
+                })
+            }
+
+            setCarrinhoPrice(carrinhoPrice + carrinhoNovo[index].price + adicionaisTotal)
             carrinhoNovo[index].quantity = carrinhoNovo[index].quantity + 1
             setCarrinho(carrinhoNovo)
         }
         if (math === '-') {
+
             if (carrinhoNovo[index].quantity > 1) {
-                setCarrinhoPrice(carrinhoPrice - carrinhoNovo[index].price)
+
+                let adicionaisTotal = 0
+                if (carrinhoNovo[index].adicionais) {
+                    carrinhoNovo[index].adicionais.map((item: any) => {
+                        adicionaisTotal += (item.price)
+                    })
+                }
+                setCarrinhoPrice(carrinhoPrice - carrinhoNovo[index].price - adicionaisTotal)
+
                 carrinhoNovo[index].quantity = carrinhoNovo[index].quantity - 1
                 setCarrinho(carrinhoNovo)
 
             } else {
-                setCarrinhoPrice(carrinhoPrice - carrinhoNovo[index].price)
+                let adicionaisTotal = 0
+                if (carrinhoNovo[index].adicionais) {
+                    carrinhoNovo[index].adicionais.map((item: any) => {
+                        adicionaisTotal += (item.price)
+                    })
+                }
+                setCarrinhoPrice(carrinhoPrice - carrinhoNovo[index].price - adicionaisTotal)
                 carrinhoNovo.splice(index, 1)
                 setCarrinho(carrinhoNovo)
             }

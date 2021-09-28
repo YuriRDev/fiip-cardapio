@@ -445,7 +445,7 @@ const ItemInfoPage = () => {
                       color: textColor,
                       fontWeight: 500,
                       fontSize: 14
-                    }}>R$ {((quantidade * price) + adicionalTotalPrice).toFixed(2).replace('.', ',')}</text>
+                    }}>R$ {((quantidade * price) + (adicionalTotalPrice * quantidade)).toFixed(2).replace('.', ',')}</text>
                 </div>
               </Link>
 

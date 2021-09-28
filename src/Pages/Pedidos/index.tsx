@@ -6,6 +6,8 @@ import { Container } from './styles'
 import ItemInfo from '../../Components/ItemInfo'
 import CategoryName from '../../Components/CategoryHolder';
 
+import { MdDirectionsBike } from 'react-icons/md'
+
 
 import Search from '../../Assets/search.svg'
 
@@ -41,6 +43,7 @@ const Pedidos = () => {
 
   const [isPremium, setIsPremium] = useState(false)
   const [isDelivery, setIsDelivery] = useState(false)
+  const [isDouble, setIsDouble] = useState(false)
 
 
   const [compraList, setCompraList] = useState([])
@@ -60,8 +63,13 @@ const Pedidos = () => {
         setTitle(data.data.title)
         setColor(data.data.color)
 
-        setIsPremium(data.data.isPremium && data.data.active)
         setIsDelivery(data.data.isDelivery && data.data.deliveryActive)
+        if (data.data.deliveryActive && data.data.isDelivery && data.data.isPremium && data.data.active) {
+          setIsPremium(false)
+        } else {
+          setIsPremium(data.data.isPremium && data.data.active)
+        }
+        setIsDouble(data.data.deliveryActive && data.data.isDelivery && data.data.isPremium && data.data.active)
 
         setPageLoading('success')
         var result: any = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(data.data.color);
@@ -176,6 +184,64 @@ const Pedidos = () => {
               }}
             />
           </div>
+
+
+          {isDouble && (
+
+            <div
+              style={{
+                display: 'flex',
+                width: '100%',
+                alignItems: 'center',
+                justifyContent: 'space-evenly',
+                marginTop: 24
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: `solid 2px ${isPremium ? color : COLORS.Inactive}`,
+                  padding: '10px 20px',
+                  borderRadius: 4,
+                  color: isPremium ? color : COLORS.Dark,
+                  flexDirection: 'column',
+                  fontWeight: isPremium ? 500 : 400,
+                  cursor: 'pointer'
+                }}
+                onClick={() => {
+                  setIsDelivery(false)
+                  setIsPremium(true)
+                }}
+              >
+                <IoTicketOutline size={18} color={isPremium ? color : COLORS.Inactive} />
+                No local
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: `solid 2px ${isDelivery ? color : COLORS.Inactive}`,
+                  padding: '10px 20px',
+                  borderRadius: 4,
+                  color: isDelivery ? color : COLORS.Dark,
+                  flexDirection: 'column',
+                  fontWeight: isDelivery ? 500 : 400,
+                  cursor: 'pointer'
+                }}
+                onClick={() => {
+                  setIsDelivery(true)
+                  setIsPremium(false)
+                }}
+              >
+                <MdDirectionsBike size={18} color={isDelivery ? color : COLORS.Inactive} />
+                Delivery
+              </div>
+            </div>
+          )}
+
 
           {/* BOTTOM NAVBAR */}
           {isPremium && (
